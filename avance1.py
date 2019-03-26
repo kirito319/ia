@@ -118,6 +118,7 @@ def main():
     initialize(G, pos, start_node, goal_node)
     getNeighbors(start_node,goal_node,G)
     print(G[(3,19)])
+    print([n for n in G.neighbors((3,19))])
     print(G.neighbors(start_node))
     #searchPath(start_node,goal_node,G)
     ''' you have to develop the rest of the functions '''
