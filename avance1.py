@@ -58,7 +58,7 @@ def heuristic(start, goal , g):
     hoizontal=20*19
     vertical=20 *19
     caminostotal=hoizontal+vertical
-    regla3=abs((conexionesreales*auxiliar3)/caminostotal) * 2
+    regla3=abs((conexionesreales*auxiliar3)/caminostotal) * 3
     return regla3
     
         
@@ -66,39 +66,79 @@ def heuristic(start, goal , g):
 #     return h
 
 
-def getNeighbors(start,goal,g):
-    listnei=[]
-    a=np.array((start))
-    down=np.array((0,-1))
-    m0=a+down
-    print m0
-    left=np.array((-1,0))
-    m1=a+left
-    print m1
-    right=np.array((1,0))
-    m2=a+right
-    print m2
-    
-    for node in enumerate (g):
-        
-        if node[1] == tuple(m0):
-            listnei.append(tuple(m0))
-        elif node [1]== tuple (m1):
-            listnei.append(tuple(m1))
-        elif node [1]== tuple(m2):
-            listnei.append(tuple(m2))
-            
-    print listnei        
-    return listnei
-
-    
+def getNeighbors(start,visited,g):
+    listnei =([n for n in g.neighbors((start))])
+    listneighbors = neiVisited(visited,listnei)
+    for node in listneighbors:
+        if node[1] > start[1]:
+            listneighbors.remove(node)
+    print ('los vecinos de ')
+    print start
+    print ('son')
+    print listneighbors
+    return listneighbors
     
     #     return "list of neighors"
+def neiVisited(visited, neighbors):
+    for node in visited:
+        if node in neighbors:
+            neighbors.remove(node)
+    return neighbors
 
-
-#def searchPath(start ,goal ,g):
-   
-    
+def searchPath(start ,goal , visited, g):
+    h= heuristic(start,goal,g)
+    s=start
+    for r in range (1,h):
+        nei=getNeighbors(s,visited,g)
+        if s == goal:
+            break
+        elif s[0] == goal[0]:
+            found = False
+            for node in nei:
+                if node[1] < s[1]:
+                    visited.append(s)
+                    s = node
+                    found = True
+                    print('me estoy moviendo a')
+                    print(s)
+            if len(nei) >= 1:
+                if node in  nei:
+                    visited.append(s)
+                    s = node
+                    found = True
+                    print('me estoy moviendo a')
+                    print(s)
+            if found == False:
+                aux_node = visited.pop()
+                visited.append(s)
+                s = aux_node
+                print('me estoy moviendo a')
+                print(s)
+        elif len(nei) >= 2:
+            if (nei[0][0]-s[0])>(nei[1][0]-s[0]):
+                visited.append(s)
+                s=nei[0]
+                print ('me estoy moviendo a')
+                print nei[0]
+            elif (nei[0][0]-s[0])<(nei[1][0]-s[0]):
+                visited.append(s)
+                s=nei[1]
+                print ('me estoy moviendo a')
+                print nei[1]
+            '''else:
+                visited.append(s)
+                s=nei[2]
+                print ('me estoy moviendo a')
+                print nei[2]'''
+        elif len(nei) == 1:
+            visited.append(s)
+            s=nei.pop()
+            print('me estoy moviendo a')
+            print(s)
+            
+                
+                
+    return h
     
 
     #     return path
@@ -111,15 +151,17 @@ def getNeighbors(start,goal,g):
 
 def main():
     G, pos = loadData()
-    print G
+
     
     start_node = (2,19)
     goal_node = (17,0)
+    visited = []
     initialize(G, pos, start_node, goal_node)
-    getNeighbors(start_node,goal_node,G)
-    print(G[(3,19)])
-    print([n for n in G.neighbors((3,19))])
-    print(G.neighbors(start_node))
+
+    #getNeighbors(start_node,G)
+    searchPath(start_node,goal_node,visited,G)
+
+    
     #searchPath(start_node,goal_node,G)
     ''' you have to develop the rest of the functions '''
     # searchPath()
