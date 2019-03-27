@@ -91,9 +91,30 @@ def searchPath(start ,goal , visited, avoid, g):
         s = aux_node
         searchPath(s, goal, visited, avoid, g)
 
-def drawPath(visited):
-    for node in visited:
-        pass
+def drawPath(G, pos, start, goal, visited):
+    color_map = []
+    node_size = []
+    for node in enumerate(G):
+        
+        if node[1] == start:
+        
+            color_map.append('green')
+            node_size.append(200)
+        elif node[1] == goal:
+            color_map.append('blue')
+            node_size.append(200)
+        elif node[1] in visited:
+            color_map.append('brown')
+            node_size.append(100)
+        else:
+            color_map.append('red')
+            node_size.append(50)
+
+    # plot graph
+    nx.draw_networkx(G, pos=pos, with_labels=False, node_color=color_map, node_size=node_size)
+    plt.xticks(np.arange(0, 20))
+    plt.yticks(np.arange(0, 20))
+    plt.show()
 
 def main():
     G, pos = loadData()
@@ -105,8 +126,12 @@ def main():
     avoid = []
     initialize(G, pos, start_node, goal_node)
     searchPath(start_node,goal_node,visited,avoid,G)
+    visited.remove(start_node)
+    visited.remove(goal_node)
+    drawPath(G, pos, start_node, goal_node, visited)
+    visited.append(goal_node)
     print(visited)
-    print('The distance walked is: ', len(visited) - 1)
+    print('The distance walked is: ', len(visited))
 
 
 # when you call the script, it will start here
