@@ -91,7 +91,7 @@ def searchPath(start ,goal , visited, avoid, g):
         s = aux_node
         searchPath(s, goal, visited, avoid, g)
 
-def drawPath(visited)
+def drawPath(visited):
     for node in visited:
         pass
 
@@ -106,6 +106,7 @@ def main():
     initialize(G, pos, start_node, goal_node)
     searchPath(start_node,goal_node,visited,avoid,G)
     print(visited)
+    print('The distance walked is: ', len(visited) - 1)
 
 
 # when you call the script, it will start here
